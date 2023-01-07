@@ -1,0 +1,140 @@
+version: "3.9"
+
+services:
+
+  servicio-citas:
+    image: villa01/servicio-citas:1.0.0
+    restart: on-failure
+    ports:
+      - 81:5000
+    env_file:
+      - ./.env-diego
+
+  servicio-medicos:
+    image: villa01/servicio-medicos:1.0.0
+    restart: on-failure
+    ports:
+      - 82:5000
+    env_file:
+      - ./.env-diego
+
+  servicio-pagos:
+    image: villa01/servicio-pagos:1.0.0
+    restart: on-failure
+    ports:
+      - 83:5000
+    env_file:
+      - ./.env-diego
+
+  servicio-usuario:
+    image: villa01/servicio-usuarios:1.0.0
+    restart: on-failure
+    ports:
+      - 84:5000
+    env_file:
+      - ./.env-diego
+
+  microservicio-obtener:
+    image: villa01/microservicio-obtener:1.0.0
+    restart: on-failure
+    ports:
+      - 85:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-recetas:
+    image: villa01/microservicio-recetas:1.0.0
+    restart: on-failure
+    ports:
+      - 86:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-guardar:
+    image: villa01/microservicio-guardar:1.0.0
+    restart: on-failure
+    ports:
+      - 87:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-agendar:
+    image: villa01/microservicio-agendar:1.0.0
+    restart: on-failure
+    ports:
+      - 88:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-eliminar-servicio:
+    image: villa01/eliminar-servicio:latest
+    restart: on-failure
+    ports: 
+      - 89:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-comprar-servicio:
+    image: villa01/comprar-servicio:latest
+    restart: on-failure
+    ports: 
+      - 90:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-enlistar-servicio:
+    image: villa01/enlistar-servicio:latest
+    restart: on-failure
+    ports: 
+      - 91:5000
+    env_file:
+      - ./.env-jose
+
+  microservicio-modificar-servicio:
+    image: villa01/modificar-servicios:latest
+    restart: on-failure
+    ports: 
+      - 92:5000
+    env_file:
+      - ./.env-jose
+
+  servicio-paquetes:
+    image: villa01/servicio-paquetes:latest
+    restart: on-failure
+    ports: 
+      - 93:5000
+    env_file:
+      - ./.env-jose
+
+  servicio-productos:
+    image: villa01/servicio-productos:latest
+    restart: on-failure
+    ports:
+      - 95:5000
+    env_file:
+      - ./.env-diego
+
+  reverse-proxy:
+    image: villa01/reverse-proxy:latest
+    ports:
+      - 5000:5000
+    depends_on:
+      - servicio-citas
+      - servicio-medicos
+      - servicio-pagos
+      - servicio-usuario
+      - servicio-paquetes
+      - servicio-productos
+      - microservicio-obtener
+      - microservicio-recetas
+      - microservicio-guardar
+      - microservicio-agendar
+      - microservicio-eliminar-servicio
+      - microservicio-comprar-servicio
+      - microservicio-enlistar-servicio
+      - microservicio-modificar-servicio
+
+  frontend: 
+    image: jd2200/frontayd2
+    ports:
+      - 3000:3000
